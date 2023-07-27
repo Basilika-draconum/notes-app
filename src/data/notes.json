@@ -1,0 +1,44 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "name": "Shopping List",
+      "category": "Task",
+      "content": "1. Milk\n2. Eggs\n3. Bread",
+      "created_at": "2023-07-27T12:00:00",
+      "dates": "2023-07-27T14:30:00"
+    },
+    {
+      "id": 2,
+      "name": "Meeting Notes",
+      "category": "Random thought",
+      "content": "Discussed project timeline and assigned tasks to team members.",
+      "created_at": "2023-07-26T15:45:00",
+      "dates": "2023-07-26T17:15:00"
+    },
+    {
+      "id": 3,
+      "name": "Ideas for Vacation",
+      "category": "Idea",
+      "content": "Implement new ideas for presentation",
+      "created_at": "2023-07-25T09:00:00",
+      "dates": "2023-07-25T09:00:00"
+    },
+    {
+      "id": 4,
+      "name": "William Gaddis",
+      "category": "Random thought",
+      "content": "Visit the Grand Canyon and relax on a beach in Hawaii",
+      "created_at": "2023-07-25T09:00:00",
+      "dates": ""
+    },
+    {
+      "id": 5,
+      "name": "Books",
+      "category": "Task",
+      "content": "The lean startup",
+      "created_at": "2023-07-25T09:00:00",
+      "dates": ""
+    }
+  ]
+}

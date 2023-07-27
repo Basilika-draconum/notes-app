@@ -1,0 +1,109 @@
+
+/* @import 'node_modules/modern-normalize/modern-normalize.css'; */
+
+body {
+    padding: 0;
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+    color: #000;
+    /* background-color: aqua; */
+}
+
+h1,
+h2,
+h3,
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+input {
+    display: block;
+    outline: none;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.container {
+    max-width: 380px;
+    margin: 0 ;
+    padding: 0 20px;
+}
+
+ @media screen and (min-width: 768px) {
+    .container {
+        max-width: 768px;
+        padding: 0 32px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .container {
+        min-width: 1200px;
+        padding: 0 32px;
+    }
+} 
+.table{
+    margin-bottom: 20px;
+    color:#606060;
+}
+.table-head{
+    background-color: #999999;
+    color:white;
+
+}
+.table-head-row{
+    text-align: center;
+}
+.table-head-item{
+    width: 200px;
+}
+.table-head-item.icon {
+    width:50px}
+
+.table-row{
+    text-align: center;
+    background-color: #e8eaf5;
+}
+.btn-create{
+    padding: 5px;
+}
+.btn{
+    background-color: transparent;
+    border: none;
+    cursor:pointer;
+}
+
+.icon {
+    /* display: inline-block; */
+    width: 24px;
+    height: 24px;
+    stroke-width: 0;
+    stroke: currentColor;
+    fill: #606060;
+}
+.icon:hover{
+    fill:#444444;
+}
+.icon-edit{
+    width: 17px;
+    height: 17px;
+}
