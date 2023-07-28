@@ -15,6 +15,39 @@
     <script type="module" src="./js/index.js"></script>
   </head>
   <body>
+    <div class="popup-wrapper">
+      <div class="popup">
+        <div class="content">
+          <p class="popup-title">Create new note!</p>
+          <button class="btn cross">
+            <svg class="icon icon-close-solid">
+              <use xlink:href="./images/icons.svg#icon-close-solid"></use>
+            </svg>
+          </button>
+          <form action="#" class="form">
+            <div class="row">
+              <label>Name</label>
+              <input type="text" name="name" id="name" />
+            </div>
+            <div class="row">
+              <label>Category</label>
+              <input type="category" name="category" id="category" />
+            </div>
+            <div class="row">
+              <label>Content</label>
+              <input type="content" name="content" id="content" />
+            </div>
+            <div class="row">
+              <label>Dates</label>
+              <input type="dates" name="dates" id="dates" />
+            </div>
+            <div class="wrapper-btn-create">
+              <button class="btn-create add">Create notes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <main>
       <div class="container">
         <h1>Hello, it's my notes</h1>
@@ -39,38 +72,28 @@
               </td>
             </tr>
           </thead>
+          <tbody class="tableActive"></tbody>
+        </table>
+        <div class="wrapper-btn-create">
+          <button type="button" class="btn-create create">Create Note</button>
+        </div>
+
+        <table class="table">
+          <thead class="table-head">
+            <tr class="table-head-row">
+              <td class="table-head-item">Note category</td>
+              <td class="table-head-item">Active</td>
+              <td class="table-head-item">Archived</td>
+            </tr>
+          </thead>
           <tbody>
-            <tr class="table-row" id="list">
-              <td id="list-name">Shopping list</td>
-              <td>April 20,2023</td>
-              <td id="list-category">Task</td>
-              <td id="list-content">Tomatoes, bread</td>
-              <td id="list-date"></td>
-              <td>
-                <button class="btn">
-                  <svg class="icon icon-edit" width="20" height="20">
-                    <use xlink:href="./images/icons.svg#icon-edit"></use>
-                  </svg>
-                </button>
-              </td>
-              <td>
-                <button class="btn">
-                  <svg class="icon icon-archive" width="20" height="20">
-                    <use xlink:href="./images/icons.svg#icon-archive"></use>
-                  </svg>
-                </button>
-              </td>
-              <td>
-                <button class="btn">
-                  <svg class="icon icon-delete" width="20" height="20">
-                    <use xlink:href="./images/icons.svg#icon-delete"></use>
-                  </svg>
-                </button>
-              </td>
+            <tr class="table-row">
+              <td>Task</td>
+              <td>13</td>
+              <td>4</td>
             </tr>
           </tbody>
         </table>
-        <button type="button" class="btn-create">Create Note</button>
       </div>
     </main>
   </body>
