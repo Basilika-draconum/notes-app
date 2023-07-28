@@ -11,7 +11,8 @@ const popupNameInput = document.getElementById("name"),
   popupContentInput = document.getElementById("content"),
   popupDatesInput = document.getElementById("dates");
 
-const tableActive = document.querySelector(".tableActive");
+const tableActive = document.querySelector(".table-active");
+const deleteBtn = document.querySelector(".btn-delete");
 
 const months = [
   "January",
@@ -32,8 +33,11 @@ createNotes.addEventListener("click", () => {
   popupBox.classList.add("show");
 });
 closePopup.addEventListener("click", () => {
+  clearInputPopup();
   popupBox.classList.remove("show");
 });
+
+showNotes();
 
 addBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -60,6 +64,7 @@ addBtn.addEventListener("click", (e) => {
     saveNotes(notes);
     console.log(notes);
     closePopup.click();
+    showNotes();
   }
 });
 
@@ -71,37 +76,51 @@ const saveNotes = (notes) => {
 };
 
 function showNotes() {
+  document
+    .querySelectorAll(".table-row-active")
+    .forEach((note) => note.remove());
   notesData.notes.forEach((note) => {
-    console.log(note);
-    let rowTableActive = `<tr class="table-row" id="list">
+    let rowTableActive = `<tr class="table-row table-row-active" id="${note.id}">
               <td id="list-name">${note.name}</td>
               <td>${note.created_at}</td>
               <td id="list-category">${note.category}</td>
               <td id="list-content">${note.content}</td>
               <td id="list-date">${note.dates}</td>
               <td>
-                <button class="btn">
-                  <svg class="icon icon-edit" width="20" height="20">
-                    <use xlink:href="./images/icons.svg#icon-edit"></use>
-                  </svg>
+                <button class="btn btn-icons btn-edit">
+                  
                 </button>
               </td>
               <td>
-                <button class="btn">
-                  <svg class="icon icon-archive" width="20" height="20">
-                    <use xlink:href="./images/icons.svg#icon-archive"></use>
-                  </svg>
+                <button class="btn btn-icons btn-archive">
+                  
                 </button>
               </td>
-              <td>
-                <button class="btn">
-                  <svg class="icon icon-delete" width="20" height="20">
-                    <use xlink:href="./images/icons.svg#icon-delete"></use>
-                  </svg>
+              <td >
+                <button class="btn btn-icons btn-delete" data-action="delete" data-id="${note.id}">
                 </button>
               </td>
             </tr>`;
-    tableActive.insertAdjacentHTML("afterend", rowTableActive);
+    tableActive.insertAdjacentHTML("beforeend", rowTableActive);
   });
 }
-showNotes();
+
+tableActive.addEventListener("click", onBtn);
+
+function onBtn(e) {
+  if (e.target.nodeName !== "BUTTON") {
+    return;
+  }
+  if (e.target.dataset.action === "delete") {
+    const id = e.target.dataset.id;
+    const tr = document.getElementById(`${id}`);
+    tr.remove();
+  }
+}
+
+function clearInputPopup() {
+  popupNameInput.value = "";
+  popupCategoryInput.value = "";
+  popupContentInput.value = "";
+  popupDatesInput.value = "";
+}

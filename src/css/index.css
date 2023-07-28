@@ -170,7 +170,27 @@ input {
     border: none;
     cursor:pointer;
 }
+.btn-icons{
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: none;
+    outline: none;
+    
+}
+.btn-delete{
+    background-image: url(../images/delete.svg);
+}
 
+.btn-archive{
+    background-image: url(../images/archive.svg);
+}
+.btn-edit{
+    background-image: url(../images/edit.svg);
+    width: 16px;
+    height: 16px;
+}
 .icon {
     /* display: inline-block; */
     width: 24px;
