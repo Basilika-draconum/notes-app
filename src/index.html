@@ -29,9 +29,15 @@
               <label>Name</label>
               <input type="text" name="name" id="name" />
             </div>
-            <div class="row">
-              <label>Category</label>
-              <input type="category" name="category" id="category" />
+            <div class="row category">
+              <p>Category</p>
+              <!-- <label>Category</label> -->
+              <select id="options">
+                <option value="Task" selected="selected">Task</option>
+                <option value="Idea">Idea</option>
+                <option value="Random Thought">Random Thought</option>
+              </select>
+              <!-- <input type="category" name="category" id="category" /> -->
             </div>
             <div class="row">
               <label>Content</label>
@@ -42,7 +48,7 @@
               <input type="dates" name="dates" id="dates" />
             </div>
             <div class="wrapper-btn-create">
-              <button class="btn-create add">Create notes</button>
+              <button class="btn-create add">Create note</button>
             </div>
           </form>
         </div>
@@ -86,13 +92,25 @@
               <td class="table-head-item">Archived</td>
             </tr>
           </thead>
-          <tbody>
-            <tr class="table-row table-row-list">
-              <td>Task</td>
-              <td>13</td>
-              <td>4</td>
+          <tbody id="count-table"></tbody>
+        </table>
+
+        <table class="table">
+          <thead class="table-head">
+            <tr class="table-head-row">
+              <td class="table-head-item">Name</td>
+              <td class="table-head-item">Created</td>
+              <td class="table-head-item">Category</td>
+              <td class="table-head-item">Content</td>
+              <td class="table-head-item">Dates</td>
+              <td class="table-head-item icon">
+                <svg class="icon icon-archive" width="20" height="20">
+                  <use xlink:href="./images/icons.svg#icon-archive"></use>
+                </svg>
+              </td>
             </tr>
-          </tbody>
+          </thead>
+          <tbody class="table-archived"></tbody>
         </table>
       </div>
     </main>
