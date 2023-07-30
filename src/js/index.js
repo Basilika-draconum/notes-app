@@ -1,5 +1,3 @@
-// import "./notes.js";
-// import "./countTable";
 import { notesData } from "../data/notesData";
 
 const createNotes = document.querySelector(".create");
@@ -55,49 +53,49 @@ closePopup.addEventListener("click", () => {
 });
 
 modalForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const notes = fetchNotes();
-  let noteName = popupNameInput.value;
-  let noteCategory = selectedCategory;
-  let noteContent = popupContentInput.value;
-  let noteDates = noteContent.match(dateRegex) || "";
-  if (!noteName || !noteCategory || !noteContent) {
-    alert("Please fill in all required fields.");
-    return;
-  }
-  let dateObj = new Date();
-  let month = months[dateObj.getMonth()],
-    day = dateObj.getDate(),
-    year = dateObj.getFullYear();
-  let noteInfo = {
-    id: String(Date.now()),
-    name: noteName,
-    category: noteCategory,
-    content: noteContent,
-    created_at: `${month} ${day},${year}`,
-    status: "active",
-    dates: noteDates,
-  };
-  if (!isEdit) {
-    notes.push(noteInfo);
-  } else {
-    // Object.assign(
-    //   notes.find(({ id }) => id === chosenNoteById.id),
-    //   noteInfo
-    // );
-    const existingNoteIndex = notes.findIndex(
-      ({ id }) => id === chosenNoteById.id
-    );
-    if (existingNoteIndex !== -1) {
-      notes[existingNoteIndex] = {
-        ...notes[existingNoteIndex],
-        ...noteInfo,
-      };
+  try {
+    e.preventDefault();
+    const notes = fetchNotes();
+    let noteName = popupNameInput.value;
+    let noteCategory = selectedCategory;
+    let noteContent = popupContentInput.value;
+    let noteDates = noteContent.match(dateRegex) || "";
+    if (!noteName || !noteCategory || !noteContent) {
+      alert("Please fill in all required fields.");
+      return;
     }
+    let dateObj = new Date();
+    let month = months[dateObj.getMonth()],
+      day = dateObj.getDate(),
+      year = dateObj.getFullYear();
+    let noteInfo = {
+      id: String(Date.now()),
+      name: noteName,
+      category: noteCategory,
+      content: noteContent,
+      created_at: `${month} ${day},${year}`,
+      status: "active",
+      dates: noteDates,
+    };
+    if (!isEdit) {
+      notes.push(noteInfo);
+    } else {
+      const existingNoteIndex = notes.findIndex(
+        ({ id }) => id === chosenNoteById.id
+      );
+      if (existingNoteIndex !== -1) {
+        notes[existingNoteIndex] = {
+          ...notes[existingNoteIndex],
+          ...noteInfo,
+        };
+      }
+    }
+    saveNotes(notes);
+    closePopup.click();
+    showNotes();
+  } catch (error) {
+    console.error("An error occurred:", error);
   }
-  saveNotes(notes);
-  closePopup.click();
-  showNotes();
 });
 
 popupCategoryInput.addEventListener("change", function () {
@@ -234,6 +232,7 @@ function countNotes(arr, str, category) {
   }
   return count;
 }
+
 //Archived table
 function createTableRowArchived(note) {
   return `
