@@ -24,20 +24,21 @@
               <use xlink:href="./images/icons.svg#icon-close-solid"></use>
             </svg>
           </button>
-          <form action="#" class="form">
+          <form class="form" id="modal-form">
             <div class="row">
               <label>Name</label>
               <input type="text" name="name" id="name" />
             </div>
             <div class="row category">
               <p>Category</p>
-              <!-- <label>Category</label> -->
               <select id="options">
-                <option value="Task" selected="selected">Task</option>
+                <option value="" disabled>
+                  Choose category
+                </option>
+                <option value="Task">Task</option>
                 <option value="Idea">Idea</option>
                 <option value="Random Thought">Random Thought</option>
               </select>
-              <!-- <input type="category" name="category" id="category" /> -->
             </div>
             <div class="row">
               <label>Content</label>
@@ -45,10 +46,10 @@
             </div>
             <div class="row">
               <label>Dates</label>
-              <input type="dates" name="dates" id="dates" />
+              <input type="dates" name="dates" id="dates" disabled/>
             </div>
             <div class="wrapper-btn-create">
-              <button class="btn-create add">Create note</button>
+              <button type="submit" class="btn-create add">Create note</button>
             </div>
           </form>
         </div>
@@ -57,6 +58,7 @@
     <main>
       <div class="container">
         <h1>Hello, it's my notes</h1>
+        <h2 class="table-head-row">Active notes</h2>
         <table class="table">
           <thead class="table-head">
             <tr class="table-head-row">
@@ -94,7 +96,7 @@
           </thead>
           <tbody id="count-table"></tbody>
         </table>
-
+        <h2 class="table-head-row">Archived notes</h2>
         <table class="table">
           <thead class="table-head">
             <tr class="table-head-row">

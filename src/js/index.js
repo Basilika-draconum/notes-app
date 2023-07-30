@@ -2,26 +2,25 @@
 // import "./countTable";
 import { notesData } from "../data/notesData";
 
-const createNotes = document.querySelector(".create"),
-  popupBox = document.querySelector(".popup-wrapper"),
-  popupTitle = document.querySelector(".popup-title"),
-  closePopup = document.querySelector(".cross"),
-  addBtn = document.querySelector(".add");
+const createNotes = document.querySelector(".create");
+const popupBox = document.querySelector(".popup-wrapper");
+const popupTitle = document.querySelector(".popup-title");
+const closePopup = document.querySelector(".cross");
+const addBtn = document.querySelector(".add");
 
 const popupNameInput = document.getElementById("name"),
   popupCategoryInput = document.getElementById("options"),
-  //   popupCategoryInput = document.getElementById("category"),
   popupContentInput = document.getElementById("content"),
-  popupDatesInput = document.getElementById("dates");
+  popupDatesInput = document.getElementById("dates"),
+  modalForm = document.getElementById("modal-form");
 
 const tableActive = document.querySelector(".table-active");
-// const deleteBtn = document.querySelector(".btn-delete");
+const tableArchive = document.querySelector(".table-archived");
+const countTableList = document.getElementById("count-table");
 
 let isEdit = false,
   chosenNoteById,
   selectedCategory;
-
-const countTableList = document.getElementById("count-table");
 
 const months = [
   "January",
@@ -38,6 +37,12 @@ const months = [
   "December",
 ];
 
+const dateRegex = /\b(0?[1-9]|1[0-2])\/(0?[1-9]|[12]\d|3[01])\/\d{4}\b/g;
+
+showNotes();
+createCountTable();
+showArchivedNotes();
+
 createNotes.addEventListener("click", () => {
   popupBox.classList.add("show");
 });
@@ -49,42 +54,50 @@ closePopup.addEventListener("click", () => {
   popupBox.classList.remove("show");
 });
 
-showNotes();
-
-addBtn.addEventListener("click", (e) => {
+modalForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const notes = fetchNotes();
-  let noteName = popupNameInput.value,
-    noteCategory = selectedCategory,
-    noteContent = popupContentInput.value,
-    noteDates = popupDatesInput.value;
-  if (noteName || noteCategory || noteContent) {
-    let dateObj = new Date();
-    let month = months[dateObj.getMonth()],
-      day = dateObj.getDate(),
-      year = dateObj.getFullYear();
-    let noteInfo = {
-      id: Date.now(),
-      name: noteName,
-      category: noteCategory,
-      content: noteContent,
-      created_at: `${month} ${day},${year}`,
-      status: "active",
-      dates: noteDates,
-    };
-    if (!isEdit) {
-      notes.push(noteInfo);
-    } else {
-      //   isEdit = false;
-      chosenNoteById = noteInfo;
-      console.log(chosenNoteById);
-      console.log(noteInfo);
-      //   saveNotes(notes);
-    }
-    saveNotes(notes);
-    closePopup.click();
-    showNotes();
+  let noteName = popupNameInput.value;
+  let noteCategory = selectedCategory;
+  let noteContent = popupContentInput.value;
+  let noteDates = noteContent.match(dateRegex) || "";
+  if (!noteName || !noteCategory || !noteContent) {
+    alert("Please fill in all required fields.");
+    return;
   }
+  let dateObj = new Date();
+  let month = months[dateObj.getMonth()],
+    day = dateObj.getDate(),
+    year = dateObj.getFullYear();
+  let noteInfo = {
+    id: String(Date.now()),
+    name: noteName,
+    category: noteCategory,
+    content: noteContent,
+    created_at: `${month} ${day},${year}`,
+    status: "active",
+    dates: noteDates,
+  };
+  if (!isEdit) {
+    notes.push(noteInfo);
+  } else {
+    // Object.assign(
+    //   notes.find(({ id }) => id === chosenNoteById.id),
+    //   noteInfo
+    // );
+    const existingNoteIndex = notes.findIndex(
+      ({ id }) => id === chosenNoteById.id
+    );
+    if (existingNoteIndex !== -1) {
+      notes[existingNoteIndex] = {
+        ...notes[existingNoteIndex],
+        ...noteInfo,
+      };
+    }
+  }
+  saveNotes(notes);
+  closePopup.click();
+  showNotes();
 });
 
 popupCategoryInput.addEventListener("change", function () {
@@ -101,13 +114,17 @@ function showNotes() {
   document
     .querySelectorAll(".table-row-active")
     .forEach((note) => note.remove());
-  notesData.notes.forEach((note) => {
+
+  const activeNotes = notesData.notes.filter(
+    (note) => note.status === "active"
+  );
+  activeNotes.forEach((note) => {
     let rowTableActive = `<tr class="table-row table-row-active" id="${note.id}">
-              <td id="list-name">${note.name}</td>
+              <td id="list-name" required>${note.name}</td>
               <td>${note.created_at}</td>
               <td id="list-category">${note.category}</td>
-              <td id="list-content">${note.content}</td>
-              <td id="list-date">${note.dates}</td>
+              <td id="list-content" required>${note.content}</td>
+              <td id="list-date" readonly>${note.dates}</td>
               <td>
                 <button class="btn btn-icons btn-edit" data-action="edit" data-id="${note.id}">
                   
@@ -126,9 +143,9 @@ function showNotes() {
   });
 }
 
-tableActive.addEventListener("click", onBtn);
+tableActive.addEventListener("click", onBtnActiveTable);
 
-function onBtn(e) {
+function onBtnActiveTable(e) {
   if (e.target.nodeName !== "BUTTON") {
     return;
   }
@@ -136,27 +153,35 @@ function onBtn(e) {
     const id = e.target.dataset.id;
     const tr = document.getElementById(`${id}`);
     tr.remove();
+    deleteNote(id);
+    createCountTable();
   }
   if (e.target.dataset.action === "archive") {
     const id = e.target.dataset.id;
+    const noteById = notesData.notes.find((note) => note.id === id);
+    noteById.status = "archived";
+    showNotes();
+    createCountTable();
+    showArchivedNotes();
   }
   if (e.target.dataset.action === "edit") {
     isEdit = true;
     const idNote = e.target.dataset.id;
-    const noteById = notesData.notes.filter(
-      (note) => note.id === Number(idNote)
-    );
-    chosenNoteById = noteById[0];
+    const noteById = notesData.notes.find((note) => note.id === idNote);
+    chosenNoteById = noteById;
     createNotes.click();
     addBtn.innerText = "Edit Note";
     popupTitle.innerText = "Edit a Note";
-    popupNameInput.value = noteById[0].name;
-    popupCategoryInput.value = noteById[0].category;
-    popupContentInput.value = noteById[0].content;
-    popupDatesInput.value = noteById[0].dates;
+    popupNameInput.value = noteById.name;
+    popupCategoryInput.value = selectedCategory;
+    popupContentInput.value = noteById.content;
+    popupDatesInput.value = noteById.dates;
+    createCountTable();
   }
 }
-
+function deleteNote(id) {
+  notesData.notes = notesData.notes.filter((note) => note.id !== id);
+}
 function clearInputPopup() {
   popupNameInput.value = "";
   popupCategoryInput.value = "";
@@ -164,7 +189,7 @@ function clearInputPopup() {
   popupDatesInput.value = "";
 }
 
-//Cума по категоріям
+//Table with counter for all types category
 function createCountTable() {
   document.querySelectorAll(".table-row-list").forEach((note) => note.remove());
   let countTaskActive = countNotes(notesData.notes, "active", "Task");
@@ -200,20 +225,16 @@ function createCountTable() {
   countTableList.insertAdjacentHTML("beforeend", rowCountTable);
 }
 
-createCountTable();
-
 function countNotes(arr, str, category) {
   let count = 0;
-
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].status === str && arr[i].category === category) {
       count++;
     }
   }
-
   return count;
 }
-
+//Archived table
 function createTableRowArchived(note) {
   return `
     <tr class="table-row table-row-archived" id="${note.id}">
@@ -227,20 +248,28 @@ function createTableRowArchived(note) {
             </tr>`;
 }
 
-// Функція для відображення даних в таблиці
-function displayNotesInTable(notes, tableClass) {
-  const tableBody = document.querySelector(`.${tableClass}`);
-  tableBody.innerHTML = "";
-
-  notes.forEach((note) => {
-    tableBody.innerHTML += createTableRow(note);
-  });
-}
-
-window.addEventListener("load", function () {
+function showArchivedNotes() {
   const archivedNotes = notesData.notes.filter(
     (note) => note.status === "archived"
   );
-  //   displayNotesInTable(activeNotes, "table-active");
-  displayNotesInTable(archivedNotes, "table-archived");
-});
+  tableArchive.innerHTML = "";
+  archivedNotes.forEach((note) => {
+    tableArchive.innerHTML += createTableRowArchived(note);
+  });
+}
+
+tableArchive.addEventListener("click", onBtnArchiveTable);
+
+function onBtnArchiveTable(e) {
+  if (e.target.nodeName !== "BUTTON") {
+    return;
+  }
+  if (e.target.dataset.action === "unarchive") {
+    const id = e.target.dataset.id;
+    const noteById = notesData.notes.find((note) => note.id === id);
+    noteById.status = "active";
+    showNotes();
+    createCountTable();
+    showArchivedNotes();
+  }
+}
