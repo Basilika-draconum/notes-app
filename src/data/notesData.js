@@ -4,7 +4,7 @@ export const notesData = {
       id: "1",
       name: "Shopping List",
       category: "Task",
-      content: "1. Milk\n2. Eggs\n3. Bread",
+      content: "1. Milk 2. Eggs 3. Bread",
       created_at: "September 20, 2023",
       status: "active",
       dates: "",
